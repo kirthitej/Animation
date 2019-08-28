@@ -1,0 +1,37 @@
+import pandas as pd
+import numpy as np
+
+data = pd.read_csv('C:\\Users\\Indium Software\\Desktop\\Study\\Bigmart\\Train.csv')
+data = data.sort_values(by = 'Outlet_Establishment_Year')
+
+data.head(10)
+del data['Item_Identifier']
+
+
+#Import mode function:
+from scipy.stats import mode
+
+#Determing the mode for each
+outlet_size_mode = data.pivot_table(values='Outlet_Size', columns='Outlet_Type',aggfunc=(lambda x:mode(x).mode[0]) )
+print ('Mode for each Outlet_Type:')
+print (outlet_size_mode)
+
+#Get a boolean variable specifying missing Item_Weight values
+miss_bool = data['Outlet_Size'].isnull() 
+
+#Impute data and check #missing values before and after imputation to confirm
+print ('\nOrignal #missing: %d'% sum(miss_bool))
+data.loc[miss_bool,'Outlet_Size'] = data.loc[miss_bool,'Outlet_Type'].apply(lambda x: outlet_size_mode[x])
+print (sum(data['Outlet_Size'].isnull()))
+
+
+import plotly.express as px
+px.scatter(data, x="Item_Weight", 
+           y="Item_MRP", 
+           animation_frame="Outlet_Establishment_Year",
+           animation_group="Item_Type",
+           size = "Item_Outlet_Sales", 
+           color="Item_Type",
+           size_max=55, 
+           range_x=[0,20], 
+           range_y=[25,300])
