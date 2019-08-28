@@ -1,0 +1,23 @@
+import numpy as np
+import pylab as p
+import matplotlib.animation as an
+
+ffwriter = an.writers['ffmpeg']
+metadata = dict(title = 'Animation',artist = 'me')
+
+writer = ffwriter(fps = 15,metadata = metadata)
+fig = p.figure()
+
+l, = p.plot([],[],'ko')
+
+p.xlim(-3,3); p.ylim(-3,3);
+
+x0 = np.zeros(10)
+y0 = np.zeros(10)
+
+with writer.saving(fig,'animation1.mp4',200):
+    for i in range(200):
+        x0 += 0.1 * np.random.randn(10)
+        y0 += 0.1 * np.random.randn(10)
+        l.set_data(x0,y0)
+        writer.grab_frame()
