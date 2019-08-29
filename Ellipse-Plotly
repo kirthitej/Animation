@@ -1,9 +1,10 @@
+#Import Libraries
 import numpy as np
 from matplotlib import pyplot as plt
 from math import pi
 import plotly.graph_objects as go
 
-import numpy as np
+#Generate data
 u=1.     #x-position of the center
 v=0.5    #y-position of the center
 a=2.     #radius on the x-axis
